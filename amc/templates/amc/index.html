@@ -1,0 +1,78 @@
+{% load i18n static %}
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+  <head>
+    <title>{% trans "Create mail pfofile" %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    {% include "bootstrap" %}
+    {% block extrahead %}{% endblock %}
+    {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
+    <style type="text/css">
+      .tooltip-inner {
+          text-align: left;
+      }
+    </style>
+  </head>
+
+  {% load i18n %}
+  <body>
+    <div class="container" style="margin-top:40px">
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <strong>
+                {% trans "Create mail pfofile" %}
+              </strong>
+            </h3>
+          </div>
+          <div class="panel-body">
+            <form action="{% url 'amc:publish' %}" method="post" role="form" name="for_email_profile">
+              {% csrf_token %}
+
+              <h3>
+                <span class="label label-primary">{{ configuration_form.verbose_name }}</span>
+              </h3>
+              <div class="row">&nbsp;</div>
+              {% for field in configuration_form %}
+              <div class="form-group">
+                <label for="{{ field.id_for_label }}" data-toggle="tooltip" data-placement="top" title="{{ field.help_text }}">
+                  {{ field.label }}
+                </label>
+                {{ field }}
+              </div>
+              {% endfor %}
+
+              <h3>
+                <span class="label label-primary">{{ email_payload_form.verbose_name }}</span>
+              </h3>
+              <div class="row">&nbsp;</div>
+              {% for field in email_payload_form %}
+              <div class="form-group">
+                <label for="{{ field.id_for_label }}" data-toggle="tooltip" data-placement="top" title="{{ field.help_text }}">
+                  {{ field.label }}
+                </label>
+                {{ field }}
+              </div>
+              {% endfor %}
+
+              <div class="row">&nbsp;</div>
+              <div class="form-group">
+                <button type="submit" class="form-control btn btn-sm btn-default">
+                  {% trans "Create" %}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      $(document).ready(function() {
+          $('[data-toggle="tooltip"]').tooltip();
+          document.forms['for_email_profile'].reset();
+      });
+    </script>
+  </body>
+</html>

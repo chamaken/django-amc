@@ -1,0 +1,5 @@
+exclude django_amc
+include LICENSE
+include README.md
+recursive-include amc/templates *
+recursive-include amc/locale *

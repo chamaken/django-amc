@@ -1,0 +1,650 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-12-19 11:52+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: models.py:88
+msgid "Configuration Profile"
+msgstr "構成プロファイル"
+
+#: models.py:119 models.py:398
+msgid "Description"
+msgstr "詳細"
+
+#: models.py:123
+msgid ""
+"PayloadDescription, String: Optional. A description of the profile, shown on "
+"the Detail screen for the profile. This should be descriptive enough to help "
+"the user decide whether to install the profile."
+msgstr ""
+"PayloadDescription 文字列: 必要な場合のみ。プロファイルの説明。これが"
+"「Detail」画面に表示されます。このプロファイルをインストールするべきか、ユー"
+"ザが判断できるように記述してください。"
+
+#: models.py:134 models.py:384
+msgid "Display name"
+msgstr "表示名"
+
+#: models.py:138
+msgid ""
+"PayloadDisplayName, String: Optional. A human-readable name for the profile. "
+"This value is displayed on the Detail screen. It does not have to be unique."
+msgstr ""
+"PayloadDisplayName 文字列。必要な場合のみ。（人が読める形の）プロファイル名。"
+"これが「Detail」画面に表示されます。一意的でなくても構いません。"
+
+#: models.py:148
+msgid "Expiration date"
+msgstr "期限年月日"
+
+#: models.py:151
+msgid ""
+"PayloadExpirationDate, Date: Optional. A date on which a profile is "
+"considered to have expired and can be updated over the air. This key is only "
+"used if the profile is delivered via over-the-air profile delivery."
+msgstr ""
+"PayloadExpirationDate 日付。必要な場合のみ。プロファイルが期限切れになり、無"
+"線接続を介して更新できるようになる日付。このキーはワイヤレスプロファイル配送"
+"機能を利用する場合にのみ使います。"
+
+#: models.py:162 models.py:353
+msgid "Identifier"
+msgstr "識別子"
+
+#: models.py:166
+msgid ""
+"PayloadIdentifier, String. A reverse-DNS style identifier (com.example."
+"myprofile, for example) that identifies the profile. This string is used to "
+"determine whether a new profile should replace an existing one or should be "
+"added."
+msgstr ""
+"PayloadIdentifier 文字列。プロファイルの特定に用いる、逆DNS形式の識別子（たと"
+"えば「com.example.myprofile」）。新しいプロファイルが渡されたとき、既存のプロ"
+"ファイルを置き換えるか、新たに追加するかを判断するために使います。"
+
+#: models.py:178 models.py:411
+msgid "Organization"
+msgstr "組織"
+
+#: models.py:182
+msgid ""
+"PayloadOrganization, String: Optional A human-readable string containing the "
+"name of the organization that provided the profile."
+msgstr ""
+"PayloadOrganization 文字列: 必要な場合のみ。このペイロードを提供する組織名。"
+"人が読める形の文字列で指定します。"
+
+#: models.py:192 models.py:369
+msgid "UUID"
+msgstr "UUID"
+
+#: models.py:196
+msgid ""
+"PayloadUUID, String. A globally unique identifier for the profile. The "
+"actual content is unimportant, but it must be globally unique. In macOS, you "
+"can use uuidgen to generate reasonable UUIDs."
+msgstr ""
+"PayloadUUID 文字列。プロファイルを特定する汎用一意識別子（UUID、"
+"UniversallyUnique IDentifier）。実際の中身は何でも構いませんが、世界全体で一"
+"意な識別子でなければなりません。macOSでは、uuidgenを使って生成できます。"
+
+#: models.py:207
+msgid "Removal disallowed"
+msgstr "削除不可"
+
+#: models.py:210
+msgid ""
+"PayloadRemovalDisallowed, Boolean: Optional. Supervised only. If present and "
+"set to true, the user cannot delete the profile (unless the profile has a "
+"removal password and the user provides it)."
+msgstr ""
+"PayloadRemovalDisallowed ブール型: 必要な場合のみ。監視対象のみ。このキーが存"
+"在し値がtrueであれば、ユーザはプロファイルを削除できません（削除パスワードが"
+"設定されており、ユーザがそれを知っている場合を除く）。"
+
+#: models.py:220 models.py:324
+msgid "Type"
+msgstr "タイプ"
+
+#: models.py:225
+msgid "PayloadType, String. The only supported value is Configuration."
+msgstr "PayloadType 文字列。設定可能な値は「Configuration」に限ります。"
+
+#: models.py:233 models.py:337
+msgid "Version"
+msgstr "バージョン"
+
+#: models.py:237
+msgid ""
+"PayloadVersion, Integer. The version number of the profile format. This "
+"describes the version of the configuration profile as a whole, not of the "
+"individual profiles within it. Currently, this value should be 1."
+msgstr ""
+"PayloadVersion 数値。プロファイル形式のバージョン番号。構成プロファイル全体の"
+"バージョンを表します。プロファイルに含まれる個々のペイロードのバージョンでは"
+"ありません。現状では、常に1を指定してください。"
+
+#: models.py:248
+msgid "Scope"
+msgstr "スコープ"
+
+#: models.py:254
+msgid ""
+"PayloadScope, String: Optional Determines if the profile should be installed "
+"for the system or the user. In many cases, it determines the location of the "
+"certificate items, such as keychains. Though it is not possible to declare "
+"different payload scopes, payloads, like VPN, may automatically install "
+"their items in both scopes if needed. Legal values are System and User, with "
+"User as the default value. Availability: Available in macOS 10.7 and later."
+msgstr ""
+"PayloadScope 文字列: 必要な場合のみ。プロファイルのインストール先（システム"
+"用、ユーザ用）を表します。多くの場合、証明項目の場所（キーチェーンなど）もこ"
+"れによって決まります。個々に異なるペイロードスコープを宣言することはできませ"
+"んが、VPNなどのペイロードは、必要に応じて自動的に、両方のスコープにインストー"
+"ルすることがあります。System、Userのいずれかを指定します（Userがデフォルト"
+"値）。設定可能なバージョン：macOS 10.7以降。"
+
+#: models.py:270
+msgid "Removal date"
+msgstr "削除年月日"
+
+#: models.py:273
+msgid ""
+"RemovalDate, Date: Optional.  The date on which the profile will be "
+"automatically removed."
+msgstr "RemovalDate date: 必要な場合のみ。プロファイルを自動的に削除する日付。"
+
+#: models.py:282
+msgid "Duration until removal"
+msgstr "自動削除するまでの時間"
+
+#: models.py:285
+msgid ""
+"DurationUntilRemoval, Float: Optional. Number of seconds until the profile "
+"is automatically removed. If the RemovalDate keys is present, whichever "
+"field yields the earliest date will be used."
+msgstr ""
+"DurationUntilRemoval float: 必要な場合のみ。プロファイルを自動削除するまでの"
+"時間（秒単位）。RemovalDateキーも存在する場合、早い方の日付を使います。"
+
+#: models.py:325
+msgid "Unconfigured type"
+msgstr "未設定タイプ"
+
+#: models.py:328
+msgid ""
+"PayloadType, String. The payload type. The payload types are described in "
+"Payload-Specific Property Keys."
+msgstr ""
+"PayloadType 文字列。ペイロードの型。詳しくは、「ペイロード特有のプロパティ"
+"キー」を参照してください。"
+
+#: models.py:340
+msgid ""
+"PayloadVersion, Integer. The version number of the individual payload.  A "
+"profile can consist of payloads with different version numbers. For example, "
+"changes to the VPN software in iOS might introduce a new payload version to "
+"support additional features, but Mail payload versions would not necessarily "
+"change in the same release."
+msgstr ""
+"PayloadVersion 数値。個々のペイロードのバージョン番号。プロファイルには異なる"
+"バージョンのペイロードが混在していても構いません。たとえば、iOSのVPNソフト"
+"ウェアに新しいバージョンのペイロードを組み込んで新機能に対応する一方、電子"
+"メールに関するペイロードは従来のままにしておく、といったことが可能です。"
+
+#: models.py:357
+msgid ""
+"PayloadIdentifier, String. A reverse-DNS-style identifier for the specific "
+"payload. It is usually the same identifier as the root-level "
+"PayloadIdentifier value with an additional component appended."
+msgstr ""
+"PayloadIdentifier 文字列。当該ペイロードの特定に用いる、逆DNS形式の識別子。通"
+"常、ルートレベルのPayloadIdentifier値と同じ識別子に、追加要素を付加して指定し"
+"ます。"
+
+#: models.py:373
+msgid ""
+"PayloadUUID, String. A globally unique identifier for the payload. The "
+"actual content is unimportant, but it must be globally unique. In macOS, you "
+"can use uuidgen to generate reasonable UUIDs."
+msgstr ""
+"PayloadUUID 文字列。プロファイルを特定する汎用一意識別子（UUID、"
+"UniversallyUnique IDentifier）。実際の中身は何でも構いませんが、世界全体で一"
+"意な識別子でなければなりません。macOSでは、uuidgenを使って生成できます。"
+
+#: models.py:385
+msgid "Unconfigured display name"
+msgstr "未設定表示名"
+
+#: models.py:388
+msgid ""
+"PayloadDisplayName, String. A human-readable name for the profile payload. "
+"This name is displayed on the Detail screen. It does not have to be unique."
+msgstr ""
+"PayloadDisplayName 文字列。必要な場合のみ。（人が読める形の）プロファイル名。"
+"これが「Detail」画面に表示されます。一意的でなくても構いません。"
+
+#: models.py:402
+msgid ""
+"PayloadDescription, String: Optional. A human-readable description of this "
+"payload. This description is shown on the Detail screen."
+msgstr ""
+"PayloadDescription 文字列: 必要な場合のみ。このペイロードの説明。人が読める形"
+"の文字列で指定します。これが「Detail」画面に表示されます。"
+
+#: models.py:415
+msgid ""
+"PayloadOrganization, String: Optional. A human-readable string containing "
+"the name of the organization that provided the profile.  The payload "
+"organization for a payload need not match the payload organization in the "
+"enclosing profile."
+msgstr ""
+"PayloadOrganization 文字列: 必要な場合のみ。このペイロードを提供する組織名。"
+"人が読める形の文字列で指定します。プロファイル全体を提供する組織とは同じでな"
+"くても構いません。"
+
+#: models.py:429
+msgid "Email Payload"
+msgstr "Email ペイロード"
+
+#: models.py:474
+msgid "Email account description"
+msgstr "メールアカウント詳細"
+
+#: models.py:478
+msgid ""
+"EmailAccountDescription, String: Optional. A user-visible description of the "
+"email account, shown in the Mail and Settings applications."
+msgstr ""
+"EmailAccountDescription 文字列: 必要な場合のみ。電子メールアカウントの説明"
+"を、人が読める形の文字列で指定します。これが「Mail and Settings」アプリケー"
+"ションに表示されます。"
+
+#: models.py:487
+msgid "Email account name"
+msgstr "アカウントのユーザー名"
+
+#: models.py:491
+msgid ""
+"EmailAccountName, String: Optional. The full user name for the account. This "
+"is the user name in sent messages, etc."
+msgstr ""
+"EmailAccountName 文字列: 必要な場合のみ。アカウントの完全ユーザー名。送信メッ"
+"セージなどに埋め込まれます。"
+
+#: models.py:500
+msgid "Email account type"
+msgstr "メールアカウントタイプ"
+
+#: models.py:505
+msgid ""
+"EmailAccountType, String. Allowed values are EmailTypePOP and EmailTypeIMAP. "
+"Defines the protocol to be used for that account."
+msgstr ""
+"EmailAccountType 文字列: 指定できる値はEmailTypePOP、EmailTypeIMAPのいずれか"
+"です。このアカウントが用いるプロトコルを定義します。"
+
+#: models.py:516
+msgid "Email address"
+msgstr "メールアドレス"
+
+#: models.py:519
+msgid ""
+"EmailAddress, String. Designates the full email address for the account. If "
+"not present in the payload, the device prompts for this string during "
+"profile installation."
+msgstr ""
+"EmailAddress 文字列: アカウントの完全電子メールアドレスを指定します。ペイロー"
+"ドに指定がなければ、プロファイルのインストール時に尋ねられます。"
+
+#: models.py:529
+msgid "Incoming mail authentication"
+msgstr "受信メール認証"
+
+#: models.py:534
+msgid ""
+"IncomingMailServerAuthentication, String. Designates the authentication "
+"scheme for incoming mail. Allowed values are EmailAuthPassword, "
+"EmailAuthCRAMMD5, EmailAuthNTLM, EmailAuthHTTPMD5, and EmailAuthNone."
+msgstr ""
+"IncomingMailServerAuthentication 文字列: 受信メールの認証スキームを表します。"
+"指定できる値は、EmailAuthPassword、EmailAuthCRAMMD5、EmailAuthNTLM、"
+"EmailAuthHTTPMD5、EmailAuthNoneです。"
+
+#: models.py:547
+msgid "Incoming mail server"
+msgstr "受信メールサーバ"
+
+#: models.py:549
+msgid ""
+"IncomingMailServerHostName, String. Designates the incoming mail server host "
+"name (or IP address)."
+msgstr ""
+"IncomingMailServerHostName 文字列: 受信メールサーバのホスト名（またはIPアドレ"
+"ス）を指定します。"
+
+#: models.py:558
+msgid "Incoming mail port"
+msgstr "受信メールポート"
+
+#: models.py:561
+msgid ""
+"IncomingMailServerPortNumber, Integer: Optional. Designates the incoming "
+"mail server port number. If no port number is specified, the default port "
+"for a given protocol is used."
+msgstr ""
+"IncomingMailServerPortNumber 整数: 必要な場合のみ。受信メールサーバのポート番"
+"号を指定します。指定しなければ、プロトコルによって決まっているデフォルトの"
+"ポート番号になります。"
+
+#: models.py:570
+msgid "Incoming SSL"
+msgstr "受信 SSL"
+
+#: models.py:573
+msgid ""
+"IncomingMailServerUseSSL, Boolean: Optional. Default false. Designates "
+"whether the incoming mail server uses SSL for authentication."
+msgstr ""
+"IncomingMailServerUseSSL ブール型: 必要な場合のみ。デフォルト値はfalseです。"
+"受信メールサーバが認証用にSSLを利用するか否かを指定します。"
+
+#: models.py:582
+msgid "Incoming user name"
+msgstr "受信ユーザー名"
+
+#: models.py:585
+msgid ""
+"IncomingMailServerUsername, String. Designates the user name for the email "
+"account, usually the same as the email address up to the @ character. If not "
+"presentin the payload, and the account is set up to require authentication "
+"for incoming email, the device will prompt for this string during profile "
+"installation."
+msgstr ""
+"IncomingMailServerUsername 文字列: 電子メールアカウントのユーザー名を指定しま"
+"す。通常は電子メールアドレスの「@」より前の部分と同じです。ペイロードに指定が"
+"なく、当該アカウントが受信メールの認証を要すると設定されていれば、プロファイ"
+"ルのインストール時に尋ねられます。"
+
+#: models.py:598
+msgid "Incoming password"
+msgstr "受信パスワード"
+
+#: models.py:602
+msgid ""
+"IncomingPassword, String: Optional. Password for the Incoming Mail Server. "
+"Use only with encrypted profiles."
+msgstr ""
+"IncomingPassword 文字列: 必要な場合のみ。受信メールサーバのパスワード。これが"
+"指定されている場合、プロファイルに暗号化を施す必要があります。"
+
+#: models.py:611
+msgid "Outgoing password"
+msgstr "送信パスワード"
+
+#: models.py:615
+msgid ""
+"OutgoingPassword,String: Optional. Password for the Outgoing Mail Server. "
+"Use only with encrypted profiles."
+msgstr ""
+"OutgoingPassword 文字列: 必要な場合のみ。送信メールサーバのパスワード。これが"
+"指定されている場合、プロファイルに暗号化を施す必要があります。"
+
+#: models.py:624
+msgid "Use incomming password as outgoing"
+msgstr "送信パスワードを受信パスワードと同じにする"
+
+#: models.py:627
+msgid ""
+"OutgoingPasswordSameAsIncomingPassword, Boolean: Optional. If set, the user "
+"will be prompted for the password only once and it will be used for both "
+"outgoing and incoming mail."
+msgstr ""
+"OutgoingPasswordSameAsIncomingPassword ブール型: 必要な場合のみ。trueであれ"
+"ば、ユーザーがパスワードを尋ねられるのは1度だけで、それ以降は、送信メール、受"
+"信メールともにそのパスワードを再利用するようになります。"
+
+#: models.py:637
+msgid "Outgoing mail authentication"
+msgstr "送信メール認証"
+
+#: models.py:642
+msgid ""
+"OutgoingMailServerAuthentication, String. Designates the authentication "
+"scheme for outgoing mail. Allowed values are EmailAuthPassword, "
+"EmailAuthCRAMMD5, EmailAuthNTLM, EmailAuthHTTPMD5, and EmailAuthNone."
+msgstr ""
+"OutgoingMailServerAuthentication 文字列: 送信メールの認証スキームを指定しま"
+"す。指定できる値は、EmailAuthPassword、EmailAuthCRAMMD5、EmailAuthNTLM、"
+"EmailAuthHTTPMD5、EmailAuthNoneです。"
+
+#: models.py:653
+msgid "Outgoing mail server"
+msgstr "送信メールサーバ"
+
+#: models.py:657
+msgid ""
+"OutgoingMailServerHostName, String.Designates the outgoing mail server host "
+"name (or IP address)."
+msgstr ""
+"OutgoingMailServerHostName 文字列: 送信メールサーバのホスト名（またはIPアドレ"
+"ス）を指定します。"
+
+#: models.py:666
+msgid "Outgoing mail port"
+msgstr "送信メールポート"
+
+#: models.py:669
+msgid ""
+"OutgoingMailServerPortNumber, Integer: Optional. Designates the outgoing "
+"mail server port number. If no port number is specified, ports 25, 587 and "
+"465 are used, in this order."
+msgstr ""
+"OutgoingMailServerPortNumber 整数: 必要な場合のみ。送信メールサーバのポート番"
+"号を指定します。指定がなければ、ポート25、587、465の順に試みます。"
+
+#: models.py:679
+msgid "Use SSL on outgoing"
+msgstr "送信 SSL"
+
+#: models.py:682
+msgid ""
+"OutgoingMailServerUseSSL, Boolean: Optional. Default false. Designates "
+"whether the outgoing mail server uses SSL for authentication."
+msgstr ""
+"OutgoingMailServerUseSSL ブール型: 必要な場合のみ。デフォルト値はfalseです。"
+"送信メールサーバが認証用にSSLを利用するか否かを指定します。"
+
+#: models.py:691
+msgid "Outgoing mail user name"
+msgstr "送信メールユーザー名"
+
+#: models.py:695
+msgid ""
+"OutgoingMailServerUsername, String. Designates the user name for the email "
+"account, usually the same as the email address up to the @ character. If not "
+"present in the payload, and the account is set up to require authentication "
+"for outgoing email, the device prompts for this string during profile "
+"installation."
+msgstr ""
+"OutgoingMailServerUsername 文字列: 電子メールアカウントのユーザー名を指定しま"
+"す。通常は電子メールアドレスの「@」より前の部分と同じです。ペイロードに指定が"
+"なく、当該アカウントが送信メールの認証を要すると設定されていれば、プロファイ"
+"ルのインストール時に尋ねられます。"
+
+#: models.py:707
+msgid "Prevent move"
+msgstr "移動を禁止"
+
+#: models.py:710
+msgid ""
+"PreventMove, Boolean: Optional.  Default false.  If true, messages may not "
+"be moved out of this email account into another account. Also prevents "
+"forwarding or replying from a different account than the message was "
+"originated from.  Availability: Available only in iOS 5.0 and later."
+msgstr ""
+"PreventMove ブール型: 必要な場合のみ。デフォルト値はfalseです。trueならば、こ"
+"の電子メールアカウントから別のアカウントにメッセージを移動することはできませ"
+"ん。また、メッセージの送信元アカウント以外から、転送や返信をすることも禁じま"
+"す。設定可能なバージョン：iOS 5.0以降。"
+
+#: models.py:722
+msgid "Prevent app sheet"
+msgstr "メールのみで使用"
+
+#: models.py:725
+msgid ""
+"PreventAppSheet, Boolean: Optional. Default false. If true, this account is "
+"not available for sending mail in any app other than the Apple Mail app. "
+"Availability: Available only in iOS 5.0 and later."
+msgstr ""
+"PreventAppSheet ブール型: 必要な場合のみ。デフォルト値はfalseです。trueなら"
+"ば、Apple Mailアプリケーション以外のアプリケーションではこのアカウントから"
+"メールを送信できません。設定可能なバージョン：iOS 5.0以降。"
+
+#: models.py:736
+msgid "S/MIME enable"
+msgstr "S/MIME 有効"
+
+#: models.py:739
+msgid ""
+"SMIMEEnabled, Boolean: Optional. Default false. If true, this account "
+"supports S/MIME. As of iOS 10.0, this key is ignored. Availability: "
+"Available only in iOS 5.0 through iOS 9.3.3."
+msgstr ""
+"SMIMEEnabled ブール型: 必要な場合のみ。デフォルト値はfalseです。trueならば、"
+"このアカウントはS/MIMEに対応しています。iOS 10.0以降では、このキーは無視され"
+"ます。設定可能なバージョン：iOS 5.0〜9.3.3で使用できます。"
+
+#: models.py:749
+msgid "S/MIME sign enable"
+msgstr "S/MIME 署名有効"
+
+#: models.py:752
+msgid ""
+"SMIMESigningEnabled, Boolean: Optional. Default true. If set to true, S/MIME "
+"signing is enabled for this account. Availability: Available only in iOS "
+"10.3 and later."
+msgstr ""
+"SMIMESigningEnabled ブール型: 必要な場合のみ。デフォルト値はtrueです。trueに"
+"設定すると、このアカウントでS/MIME署名が有効になります。設定可能なバージョ"
+"ン：iOS 10.3以降。"
+
+#: models.py:762
+msgid "S/MIME sign certificate UUID"
+msgstr "S/MIME 署名 UUID"
+
+#: models.py:766
+msgid ""
+"SMIMESigningCertificateUUID, String: Optional. The PayloadUUID of the "
+"identity certificate used to sign messages sent from this account. "
+"Availability: Available only in iOS 5.0 and later."
+msgstr ""
+"SMIMESigningCertificateUUID 文字列: 必要な場合のみ。このアカウントから送信す"
+"るメッセージに署名するために用いる、固有証明書のPayloadUUID。設定可能なバー"
+"ジョン：iOS 5.0以降。"
+
+#: models.py:776
+msgid "S/MIME encryption enabled"
+msgstr "S/MIME 暗号化有効"
+
+#: models.py:779
+msgid ""
+"SMIMEEncryptionEnabled, Boolean: Optional. Default false. If set to true, S/"
+"MIME encryption is on by default for this account. Availability: Available "
+"only in iOS 10.3 and later."
+msgstr ""
+"SMIMEEncryptionEnabled ブール型:必要な場合のみ。デフォルト値はfalseです。true"
+"に設定すると、このアカウントでS/MIME暗号化がデフォルトでオンになります。設定"
+"可能なバージョン：iOS 10.3以降。"
+
+#: models.py:789
+msgid "S/MIME encryption certificate UUID"
+msgstr "S/MIME 暗号化 UUID"
+
+#: models.py:793
+msgid ""
+"SMIMEEncryptionCertificateUUID, String: Optional. The PayloadUUID of the "
+"identity certificate used to decrypt messages sent to this account. The "
+"public certificate is attached to outgoing mail to allow encrypted mail to "
+"be sent to this user. When the user sends encrypted mail, the public "
+"certificate is used to encrypt the copy of the mail in their Sent mailbox. "
+"Availability: Available only in iOS 5.0 and later."
+msgstr ""
+"SMIMEEncryptionCertificateUUID 文字列: 必要な場合のみ。このアカウントに送信さ"
+"れるメッセージを復号化するために用いる、固有証明書のPayloadUUID。発信メールに"
+"公開証明書が添付され、このユーザーに暗号メールを送信できるようになります。"
+"ユーザーが暗号メールを送信すると、「送信済み」ボックスにあるメールの複製が公"
+"開証明書で暗号化されます。設定可能なバージョン：iOS 5.0以降。"
+
+#: models.py:808
+msgid "S/MIME per message switch enable"
+msgstr "メッセージ単位 S/MIME 許可"
+
+#: models.py:811
+msgid ""
+"SMIMEEnablePerMessageSwitch, Boolean: Optional. Default false. If set to "
+"true, displays the per-message encryption switch in the Mail Compose UI. "
+"Availability: Available only in iOS 8.0 and later."
+msgstr ""
+"SMIMEEnablePerMessageSwitch ブール型: 必要な場合のみ。デフォルト値はfalseで"
+"す。trueに設定すると、メールごとの暗号化を実行するためのスイッチがメール作成"
+"UIに表示されます。設定可能なバージョン：iOS 8.0以降。"
+
+#: models.py:821
+msgid "Disable recents address syncing"
+msgstr "履歴同期無効"
+
+#: models.py:824
+msgid ""
+"disableMailRecentsSyncing, Boolean. If true, this account is excluded from "
+"address Recents syncing. This defaults to false. Availability: Available "
+"only in iOS 6.0 and later."
+msgstr ""
+"disableMailRecentsSyncing ブール型: trueならば、このアカウントは「最近使用し"
+"たアドレス」の同期処理の対象外になります。デフォルト値はfalseです。設定可能な"
+"バージョン：iOS 6.0以降。"
+
+#: models.py:834
+msgid "Allow mail drop"
+msgstr "Mail Drop 有効"
+
+#: models.py:837
+msgid ""
+"allowMailDrop, Boolean: Optional. If true, this account is allowed to use "
+"Mail Drop. The default is false. Availability: Available in iOS 9.2 and "
+"later."
+msgstr ""
+"allowMailDrop ブール型: 必要な場合のみ。trueならば、このアカウントでMail Drop"
+"を使用できます。デフォルト値はfalseです。設定可能なバージョン：iOS 9.2以降。"
+
+#: templates/amc/demo.html:6 templates/amc/demo.html:26
+#: templates/amc/index.html:6 templates/amc/index.html:26
+msgid "Create mail pfofile"
+msgstr "メールプロファイル作成"
+
+#: templates/amc/demo.html:84 templates/amc/index.html:63
+msgid "Create"
+msgstr "作成"
+
+#: templates/amc/demo.html:119
+msgid "Enter email address"
+msgstr "メールアドレスを入力してください"
+
+#~ msgid "unconfigured identifier"
+#~ msgstr "未設定識別子"
