@@ -1,0 +1,4 @@
+**/__pycache__
+*.mo
+db.sqlite3
+log/
