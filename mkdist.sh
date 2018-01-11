@@ -5,7 +5,7 @@ CWD=$(pwd)
 TMPDIR=$(mktemp -d)
 trap "rm -rf $TMPDIR" 1 2 15
 
-cp -au amc LICENSE MANIFEST.in README.md requirements.txt setup.py $TMPDIR
+cp -au amc LICENSE MANIFEST.in README.rst requirements.txt setup.py $TMPDIR
 
 cd $TMPDIR
 $PYTHON setup.py sdist
