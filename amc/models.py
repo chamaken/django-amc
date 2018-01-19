@@ -110,6 +110,7 @@ class Configuration(SimplePayload):
             raise ValueError('duplicate PayloadIdentifier')
 
         self._payload_contents.append(payload)
+        return self
 
 
     def save(self, *args, **kwargs):
