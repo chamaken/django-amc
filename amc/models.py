@@ -367,7 +367,11 @@ class CommonPayload(SimplePayload):
         abstract = True
 
 
-    configuration = models.ForeignKey(Configuration, on_delete=models.CASCADE)
+    configuration = models.ForeignKey(
+        Configuration,
+        blank=True, null=True,
+        on_delete=models.CASCADE)
+
 
     payload_type = AMCCharField(
         tag_text='PayloadType',
