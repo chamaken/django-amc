@@ -135,6 +135,7 @@ class Configuration(SimplePayload):
         pld = super(Configuration, self)._as_pldict()
         [self._payload_contents.append(c)
          for robj in Configuration._meta.related_objects
+         if robj.one_to_many
          for c in getattr(self, robj.get_accessor_name()).iterator()]
 
         if len(self._payload_contents) < 1:
