@@ -37,7 +37,7 @@ class EmailPayloadTests(TestCase):
         try: model.full_clean()
         except exceptions.ValidationError as e:
             d = e.error_dict
-            self.assertEqual(len(d), 3,
+            self.assertEqual(len(d), 2,
                              'empty constructor lacks 2 required fields')
             self.assertIn('incoming_mail_server_host_name', d,
                           'incoming_mail_server_host_name exists in the error')
@@ -47,10 +47,6 @@ class EmailPayloadTests(TestCase):
                           'outgoing_mail_server_host_name exists in the error')
             self.assertEqual(len(d['outgoing_mail_server_host_name']), 1,
                              'outgoing_mail_server_host_name has one error')
-            self.assertIn('configuration', d,
-                          'configuration exists in the error')
-            self.assertEqual(len(d['configuration']), 1,
-                             'configuration has one error')
         else:
             fail('empty constructor is not valid')
 
