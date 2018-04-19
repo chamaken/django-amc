@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.utils.encoding import force_text
 from django.utils.functional import Promise
 from django.utils.translation import ugettext_lazy as _
+from django.utils.safestring import mark_safe
 
 
 class AMCFieldMixin(object):
@@ -893,6 +894,1609 @@ class EmailPayload(CommonPayload):
     )
 
 
+class RestrictionsPayload(CommonPayload):
+    """Restrictions Payload
+
+    A Restrictions payload allows the administrator to restrict the user from
+    doing certain things with the device, such as using the camera.
+
+    Note: You can specify additional restrictions, including maximum allowed
+    content ratings, by creating a profile using Apple Configurator 2 or Profile
+    Manager.
+    """
+
+    class Meta:
+        verbose_name = _('Restrictions Payload')
+
+
+    def __init__(self, *args, **kwargs):
+        meta = self._meta
+        meta.get_field('payload_type').default = 'com.apple.applicationaccess'
+        meta.get_field('payload_type').editale = False
+        meta.get_field('payload_version').default = 1
+        meta.get_field('payload_version').editable = False
+        super(RestrictionsPayload, self).__init__(*args, **kwargs)
+
+
+    allow_account_modification = AMCNullBooleanField(
+        tag_text='allowAccountModification',
+        verbose_name=_('Allow Account Modification'),
+        null=True, blank=True,
+        help_text=_(
+            "allowAccountModification, Boolean: Optional."
+            " Supervised only. If set to false, account modification is"
+            " disabled. Availability: Available only in iOS 7.0 and"
+            " later."
+        )
+    )
+
+
+    allow_adding_game_center_friends = AMCNullBooleanField(
+        tag_text='allowAddingGameCenterFriends',
+        verbose_name=_('Allow Adding Game Center Friends'),
+        null=True, blank=True,
+        help_text=_(
+            "allowAddingGameCenterFriends, Boolean: Optional. When"
+            " false, prohibits adding friends to Game Center. This"
+            " key is deprecated on unsupervised devices."
+        )
+    )
+
+
+    allow_air_drop = AMCNullBooleanField(
+        tag_text='allowAirDrop',
+        verbose_name=_('Allow Air Drop'),
+        null=True, blank=True,
+        help_text=_(
+            "allowAirDrop, Boolean: Optional. Supervised only. If set to"
+            " false, AirDrop is disabled. Availability: Available only"
+            " in iOS 7.0 and later."
+        )
+    )
+
+
+    allow_app_cellular_data_modification = AMCNullBooleanField(
+        tag_text='allowAppCellularDataModification',
+        verbose_name=_('Allow App Cellular Data Modification'),
+        null=True, blank=True,
+        help_text=_(
+            "allowAppCellularDataModification, Boolean: Optional."
+            " Supervised only. If set to false, changes to cellular data"
+            " usage for apps are disabled. Availability: Available only"
+            " in iOS 7.0 and later."
+        )
+    )
+
+
+    allow_app_installation = AMCNullBooleanField(
+        tag_text='allowAppInstallation',
+        verbose_name=_('Allow App Installation'),
+        null=True, blank=True,
+        help_text=_(
+            "allowAppInstallation, Boolean: Optional. Supervised"
+            " only. When false, the App Store is disabled and its icon"
+            " is removed from the Home screen. Users are unable to "
+            " install or update their applications. This key is"
+            " deprecated on unsupervised devices."
+        )
+    )
+
+
+    allow_app_removal = AMCNullBooleanField(
+        tag_text='allowAppRemoval',
+        verbose_name=_('Allow App Removal'),
+        null=True, blank=True,
+        help_text=_(
+            "allowAppRemoval, Boolean: Optional. When false, disables"
+            "removal of apps from iOS device. This key is deprecated on"
+            " unsupervised devices."
+        )
+    )
+
+
+    allow_assistant = AMCNullBooleanField(
+        tag_text='allowAssistant',
+        verbose_name=_('Allow Assistant'),
+        null=True, blank=True,
+        help_text=_(
+            "allowAssistant, Boolean: Optional. When false, disables"
+            " Siri. Defaults to true."
+        )
+    )
+
+
+    allow_assistant_user_generated_content = AMCNullBooleanField(
+        tag_text='allowAssistantUserGeneratedContent',
+        verbose_name=_('Allow Assistant User Generated Content'),
+        null=True, blank=True,
+        help_text=_(
+            "allowAssistantUserGeneratedContent, Boolean: Optional."
+            " Supervised only. When false, prevents Siri from querying"
+            " user-generated content from the web.  Availability:"
+            " Available in iOS 7 and later."
+        )
+    )
+
+    allow_assistant_while_locked = AMCNullBooleanField(
+        tag_text='allowAssistantWhileLocked',
+        verbose_name=_('Allow Assistant While Locked'),
+        null=True, blank=True,
+        help_text=_(
+            "allowAssistantWhileLocked, Boolean: Optional. When false,"
+            " the user is unable to use Siri when the device is"
+            " locked. Defaults to true. This restriction is ignored if"
+            " the device does not have a passcode set. Availability:"
+            " Available only in iOS 5.1 and later."
+        )
+    )
+
+
+    allow_bookstore = AMCNullBooleanField(
+        tag_text='allowBookstore',
+        verbose_name=_('Allow Bookstore'),
+        null=True, blank=True,
+        help_text=_(
+            "allowBookstore, Boolean: Optional. Supervised only. If set"
+            " to false, the iBooks Store will be disabled. This will"
+            " default to true.  Availability: Available in iOS 6.0 and"
+            " later."
+        )
+    )
+
+
+    allow_bookstore_erotica = AMCNullBooleanField(
+        tag_text='allowBookstoreErotica',
+        verbose_name=_('Allow Bookstore Erotica'),
+        null=True, blank=True,
+        help_text=_(
+            " allowBookstoreErotica, Boolean: Optional. Supervised only"
+            " prior to iOS 6.1. If set to false, the user will not be"
+            " able to download media from the iBooks Store that has been"
+            " tagged as erotica. This will default to true."
+            " Availability: Available in iOS and in tvOS 11.3 and later."
+        )
+    )
+
+
+    allow_camera = AMCNullBooleanField(
+        tag_text='allowCamera',
+        verbose_name=_('Allow Camera'),
+        null=True, blank=True,
+        help_text=_(
+            "allowCamera, Boolean: Optional. When false, the camera is"
+            " completely disabled and its icon is removed from the Home"
+            " screen. Users are unable to take photographs."
+            " Availability: Available in iOS and in macOS 10.11 and "
+            " later."
+        )
+    )
+
+
+    allow_chat = AMCNullBooleanField(
+        tag_text='allowChat',
+        verbose_name=_('Allow Chat'),
+        null=True, blank=True,
+        help_text=_(
+            "allowChat, Boolean: Optional. When false, disables the use"
+            " of the Messages app with supervised devices. Availability:"
+            " Available in iOS 6.0 and later."
+        )
+    )
+
+
+    allow_cloud_backup = AMCNullBooleanField(
+        tag_text='allowCloudBackup',
+        verbose_name=_('Allow Cloud Backup'),
+        null=True, blank=True,
+        help_text=_(
+            "allowCloudBackup, Boolean: Optional. When false, disables"
+            " backing up the device to iCloud.  Availability: Available"
+            " in iOS 5.0 and later."
+        )
+    )
+
+
+    allow_cloud_bookmarks = AMCNullBooleanField(
+        tag_text='allowCloudBookmarks',
+        verbose_name=_('Allow Cloud Bookmarks'),
+        null=True, blank=True,
+        help_text=_(
+            "allowCloudBookmarks, Boolean: Optional. When false,"
+            " disallows macOS iCloud Bookmark sync.  Availability:"
+            " Available in macOS 10.12 and later."
+        )
+    )
+
+
+    allow_cloud_mail = AMCNullBooleanField(
+        tag_text='allowCloudMail',
+        verbose_name=_('Allow Cloud Mail'),
+        null=True, blank=True,
+        help_text=_(
+            "allowCloudMail. Boolean: Optional. When false, disallows"
+            " macOS Mail iCloud services. Availability: Available in"
+            " macOS 10.12 and later."
+        )
+    )
+
+
+    allow_cloud_calendar = AMCNullBooleanField(
+        tag_text='allowCloudCalendar',
+        verbose_name=_('Allow Cloud Calendar'),
+        null=True, blank=True,
+        help_text=_(
+            "allowCloudCalendar, Boolean: Optional. When false,"
+            " disallows macOS iCloud Calendar services. Availability:"
+            " Available in macOS 10.12 and later."
+        )
+    )
+
+
+    allow_cloud_reminders = AMCNullBooleanField(
+        tag_text='allowCloudReminders',
+        verbose_name=_('Allow Cloud Reminders'),
+        null=True, blank=True,
+        help_text=_(
+            "allowCloudReminders, Boolean: Optional. When false,"
+            " disallows iCloud Reminder services. Availability:"
+            " Available in macOS 10.12 and later."
+        )
+    )
+
+
+    allow_cloud_address_book = AMCNullBooleanField(
+        tag_text='allowCloudAddressBook',
+        verbose_name=_('Allow Cloud Address Book'),
+        null=True, blank=True,
+        help_text=_(
+            "allowCloudAddressBook, Boolean: Optional. When false,"
+            " disallows macOS iCloud Address Book services."
+            " Availability: Available in macOS 10.12 and later."
+        )
+    )
+
+
+    allow_cloud_notes = AMCNullBooleanField(
+        tag_text='allowCloudNotes',
+        verbose_name=_('Allow Cloud Notes'),
+        null=True, blank=True,
+        help_text=_(
+            "allowCloudNotes, Boolean: Optional. When false, disallows"
+            " macOS iCloud Notes services. Availability: Available in"
+            " macOS 10.12 and later."
+        )
+    )
+
+
+    allow_cloud_document_sync = AMCNullBooleanField(
+        tag_text='allowCloudDocumentSync',
+        verbose_name=_('Allow Cloud Document Sync'),
+        null=True, blank=True,
+        help_text=_(
+            "allowCloudDocumentSync, Boolean: Optional. When false,"
+            " disables document and key-value syncing to iCloud. This"
+            " key is deprecated on unsupervised devices. Availability:"
+            " Available in iOS 5.0 and later and in macOS 10.11 and"
+            " later. "
+        )
+    )
+
+
+    allow_cloud_keychain_sync = AMCNullBooleanField(
+        tag_text='allowCloudKeychainSync',
+        verbose_name=_('Allow Cloud Keychain Sync'),
+        null=True, blank=True,
+        help_text=_(
+            "allowCloudKeychainSync, Boolean: Optional. When false,"
+            " disables iCloud keychain synchronization. Default is true."
+            " Availability: Available in iOS 7.0 and later and macOS"
+            " 10.12 and later."
+        )
+    )
+
+
+    allow_content_caching = AMCNullBooleanField(
+        tag_text='allowContentCaching',
+        verbose_name=_('Allow Content Caching'),
+        null=True, blank=True,
+        help_text=_(
+            "allowContentCaching, Boolean: Optional. When false, this"
+            " disallows content caching. Defaults to true. Availability:"
+            " Available only in macOS 10.13 and later."
+        )
+    )
+
+
+    allow_diagnostic_submission = AMCNullBooleanField(
+        tag_text='allowDiagnosticSubmission',
+        verbose_name=_('Allow Diagnostic Submission'),
+        null=True, blank=True,
+        help_text=_(
+            "allowDiagnosticSubmission, Boolean: Optional. When false,"
+            " this prevents the device from automatically submitting"
+            " diagnostic reports to Apple. Defaults to"
+            " true. Availability: Available only in iOS 6.0 and later."
+        )
+    )
+
+
+    allow_explicit_content = AMCNullBooleanField(
+        tag_text='allowExplicitContent',
+        verbose_name=_('Allow Explicit Content'),
+        null=True, blank=True,
+        help_text=_(
+            "allowExplicitContent, Boolean: Optional. When false,"
+            " explicit music or video content purchased from the iTunes"
+            " Store is hidden. Explicit content is marked as such by"
+            " content providers, such as record labels, when sold"
+            " through the iTunes Store. This key is deprecated on"
+            " unsupervised devices. Availability: Available in iOS and"
+            " in tvOS 11.3 and later."
+        )
+    )
+
+
+    allow_find_my_friends_modification = AMCNullBooleanField(
+        tag_text='allowFindMyFriendsModification',
+        verbose_name=_('Allow Find My Friends Modification'),
+        null=True, blank=True,
+        help_text=_(
+            "allowFindMyFriendsModification, Boolean:"
+            " Optional. Supervised only. If set to false, changes to"
+            " Find My Friends are disabled. Availability: Available only"
+            " in iOS 7.0 and later."
+        )
+    )
+
+
+    allow_fingerprint_for_unlock = AMCNullBooleanField(
+        tag_text='allowFingerprintForUnlock',
+        verbose_name=_('Allow Fingerprint For Unlock'),
+        null=True, blank=True,
+        help_text=_(
+            "allowFingerprintForUnlock, Boolean: Optional. If false,"
+            " prevents Touch ID from unlocking a device."
+            " Availability: Available in iOS 7 and later and in macOS"
+            " 10.12.4 and later."
+        )
+    )
+
+
+    allow_game_center = AMCNullBooleanField(
+        tag_text='allowGameCenter',
+        verbose_name=_('Allow Game Center'),
+        null=True, blank=True,
+        help_text=_(
+            "allowGameCenter, Boolean: Optional. Supervised only. When"
+            " false, Game Center is disabled and its icon is removed"
+            " from the Home screen. Default is true. Availability:"
+            " Available only in iOS 6.0 and later."
+        )
+    )
+
+
+    allow_global_background_fetch_when_roaming = AMCNullBooleanField(
+        tag_text='allowGlobalBackgroundFetchWhenRoaming',
+        verbose_name=_('Allow Global Background Fetch When Roaming'),
+        null=True, blank=True,
+        help_text=_(
+            "allowGlobalBackgroundFetchWhenRoaming, Boolean:"
+            " Optional. When false, disables global background fetch"
+            " activity when an iOS phone is roaming."
+        )
+    )
+
+
+    allow_in_app_purchases = AMCNullBooleanField(
+        tag_text='allowInAppPurchases',
+        verbose_name=_('Allow In App Purchases'),
+        null=True, blank=True,
+        help_text=_(
+            "allowInAppPurchases, Boolean: Optional. When false,"
+            " prohibits in-app purchasing."
+        )
+    )
+
+
+    allow_lock_screen_control_center = AMCNullBooleanField(
+        tag_text='allowLockScreenControlCenter',
+        verbose_name=_('Allow Lock Screen Control Center'),
+    null=True, blank=True,
+        help_text=_(
+            "allowLockScreenControlCenter, Boolean: Optional. If false,"
+            " prevents Control Center from appearing on the Lock"
+            " screen. Availability: Available in iOS 7 and later."
+        )
+    )
+
+
+    allow_host_pairing = AMCNullBooleanField(
+        tag_text='allowHostPairing',
+        verbose_name=_('Allow Host Pairing'),
+        null=True, blank=True,
+        help_text=_(
+            "allowHostPairing, Boolean: Supervised only. If set to"
+            " false, host pairing is disabled with the exception of the"
+            " supervision host. If no supervision host certificate has"
+            " been configured, all pairing is disabled. Host pairing"
+            " lets the administrator control which devices an iOS 7"
+            " device can pair with. Availability: Available only in iOS"
+            " 7.0 and later."
+        )
+    )
+
+
+    allow_lock_screen_notifications_view = AMCNullBooleanField(
+        tag_text='allowLockScreenNotificationsView',
+        verbose_name=_('Allow Lock Screen Notifications View'),
+        null=True, blank=True,
+        help_text=_(
+            "allowLockScreenNotificationsView, Boolean: Optional. If set"
+            " to false, the Notifications view in Notification Center on"
+            " the lock screen is disabled and users can’t receive"
+            " notifications when the screen is locked. Availability:"
+            " Available only in iOS 7.0 and later."
+        )
+    )
+
+
+    allow_lock_screen_today_view = AMCNullBooleanField(
+        tag_text='allowLockScreenTodayView',
+        verbose_name=_('Allow Lock Screen Today View'),
+        null=True, blank=True,
+        help_text=_(
+            "allowLockScreenTodayView, Boolean: Optional. If set to"
+            " false, the Today view in Notification Center on the lock"
+            " screen is disabled. Availability: Available only in iOS"
+            " 7.0 and later."
+        )
+    )
+
+
+    allow_multiplayer_gaming = AMCNullBooleanField(
+        tag_text='allowMultiplayerGaming',
+        verbose_name=_('Allow Multiplayer Gaming'),
+        null=True, blank=True,
+        help_text=_(
+            "allowMultiplayerGaming, Boolean: Optional. When false,"
+            " prohibits multiplayer gaming. This key is deprecated on"
+            " unsupervised devices."
+        )
+    )
+
+
+    allow_open_from_managed_to_unmanaged = AMCNullBooleanField(
+        tag_text='allowOpenFromManagedToUnmanaged',
+        verbose_name=_('Allow Open From Unmanaged To Managed'),
+        null=True, blank=True,
+        help_text=_(
+            "allowOpenFromManagedToUnmanaged, Boolean: Optional. If"
+            " false, documents in managed apps and accounts only open in"
+            " other managed apps and accounts. Default is true."
+            " Availability: Available only in iOS 7.0 and later."
+        )
+    )
+
+
+    allow_open_from_unmanaged_to_managed = AMCNullBooleanField(
+        tag_text='allowOpenFromUnmanagedToManaged',
+        verbose_name=_('Allow Open From Managed To Unmanaged'),
+        null=True, blank=True,
+        help_text=_(
+            "allowOpenFromUnmanagedToManaged, Boolean: Optional. If set"
+            " to false, documents in unmanaged apps and accounts will"
+            " only open in other unmanaged apps and accounts. Default is"
+            " true. Availability: Available only in iOS 7.0 and later."
+        )
+    )
+
+
+    allow_ota_pki_updates = AMCNullBooleanField(
+        tag_text='allowOTAPKIUpdates',
+        verbose_name=_('Allow OTA PKI Updates'),
+        null=True, blank=True,
+        help_text=_(
+            "allowOTAPKIUpdates, Boolean: Optional. If false,"
+            " over-the-air PKI updates are disabled. Setting this"
+            " restriction to false does not disable CRL and OCSP checks."
+            " Default is true. Availability: Available only in iOS 7.0"
+            " and later."
+        )
+    )
+
+
+    allow_passbook_while_locked = AMCNullBooleanField(
+        tag_text='allowPassbookWhileLocked',
+        verbose_name=_('Allow Passbook While Locked'),
+        null=True, blank=True,
+        help_text=_(
+            "allowPassbookWhileLocked, Boolean: Optional. If set to"
+            " false, Passbook notifications will not be shown on the"
+            " lock screen.This will default to true. Availability:"
+            " Available in iOS 6.0 and later."
+        )
+    )
+
+    allow_photo_stream = AMCNullBooleanField(
+        tag_text='allowPhotoStream',
+        verbose_name=_('Allow Photo Stream'),
+        null=True, blank=True,
+        help_text=_(
+            "allowPhotoStream, Boolean: Optional. When false, disables"
+            " Photo Stream. Availability: Available in iOS 5.0 and"
+            " later."
+        )
+    )
+
+
+    allow_safari = AMCNullBooleanField(
+        tag_text='allowSafari',
+        verbose_name=_('Allow Safari'),
+        null=True, blank=True,
+        help_text=_(
+            "allowSafari, Boolean: Optional. When false, the Safari web"
+            " browser application is disabled and its icon removed from"
+            " the Home screen. This also prevents users from opening web"
+            " clips. This key is deprecated on unsupervised devices."
+        )
+    )
+
+
+    safari_allow_auto_fill = AMCNullBooleanField(
+        tag_text='safariAllowAutoFill',
+        verbose_name=_('safari Allow Auto Fill'),
+        null=True, blank=True,
+        help_text=_(
+            "safariAllowAutoFill, Boolean: Optional. When false, Safari"
+            " auto-fill is disabled. Defaults to true."
+        )
+    )
+
+
+    safari_force_fraud_warning = AMCNullBooleanField(
+        tag_text='safariForceFraudWarning',
+        verbose_name=_('safari Force Fraud Warning'),
+        null=True, blank=True,
+        help_text=_(
+            "safariForceFraudWarning, Boolean: Optional. When true,"
+            " Safari fraud warning is enabled. Defaults to false."
+        )
+    )
+
+
+    safari_allow_java_script = AMCNullBooleanField(
+        tag_text='safariAllowJavaScript',
+        verbose_name=_('safari Allow Java Script'),
+        null=True, blank=True,
+        help_text=_(
+            "safariAllowJavaScript, Boolean: Optional. When false,"
+            " Safari will not execute JavaScript. Defaults to true."
+        )
+    )
+
+
+    safari_allow_popups = AMCNullBooleanField(
+        tag_text='safariAllowPopups',
+        verbose_name=_('safari Allow Popups'),
+        null=True, blank=True,
+        help_text=_(
+            "safariAllowPopups, Boolean: Optional. When false, Safari"
+            " will not allow pop-up tabs. Defaults to true."
+        )
+    )
+
+
+    safari_accept_cookies = AMCNullBooleanField(
+        tag_text='safariAcceptCookies',
+        verbose_name=_('safari Accept Cookies'),
+        null=True, blank=True,
+        help_text=mark_safe(_(
+            "safariAcceptCookies, Real: Optional. Determines conditions"
+            " under which the device will accept cookies. The user"
+            " facing settings changed in iOS 11, though the possible"
+            " values remain the same: <ul>"
+            " <li>0: Prevent Cross-Site Tracking and Block All Cookies"
+            " are enabled and the user can’t disable either setting.</li>"
+            " <li>1 or 1.5: Prevent Cross-Site Tracking is enabled and"
+            " the user can’t disable it. Block All Cookies is not"
+            " enabled, though the user can enable it.</li>"
+            " <li>2: Prevent Cross-Site Tracking is enabled and Block"
+            " All Cookies is not enabled. The user can toggle either"
+            " setting. (Default)</li>"
+            " </ul>"
+            "These are the allowed values and settings in iOS 10 and"
+            " earlier:<ul>"
+            " <li>0: Never</li>"
+            " <li>1: Allow from current website only</li>"
+            " <li>1.5: Allow from websites visited (Available in iOS 8.0"
+            " and later); enter '<real>1.5</real>'<li>"
+            " <li>2: Always (Default)</li>"
+            " </ul>"
+            "In iOS 10 and earlier, users can always pick an option that"
+            " is more restrictive than the payload policy, but not a"
+            " less restrictive policy. For example, with a payload value"
+            " of 1.5, a user could switch to Never, but not Always"
+            " Allow."
+        ))
+    )
+
+
+    allow_shared_stream = AMCNullBooleanField(
+        tag_text='allowSharedStream',
+        verbose_name=_('Allow Shared Stream'),
+        null=True, blank=True,
+        help_text=_(
+            "allowSharedStream, Boolean: Optional. If set to false,"
+            " Shared Photo Stream will be disabled. This will default to"
+            " true. Availability: Available in iOS 6.0 and later."
+        )
+    )
+
+
+    allow_ui_configuration_profile_installation = AMCNullBooleanField(
+        tag_text='allowUIConfigurationProfileInstallation',
+        verbose_name=_('Allow UI Configuration Profile Installation'),
+        null=True, blank=True,
+        help_text=_(
+            "allowUIConfigurationProfileInstallation, Boolean:"
+            " Optional. Supervised only. If set to false, the user is"
+            " prohibited from installing configuration profiles and"
+            " certificates interactively. This will default to true."
+            " Availability: Available in iOS 6.0 and later."
+        )
+    )
+
+
+    allow_untrusted_tls_prompt = AMCNullBooleanField(
+        tag_text='allowUntrustedTLSPrompt',
+        verbose_name=_('Allow Untrusted TLS Prompt'),
+        null=True, blank=True,
+        help_text=_(
+            "allowUntrustedTLSPrompt, Boolean: Optional. When false,"
+            " automatically rejects untrusted HTTPS certificates without"
+            " prompting the user. Availability: Available in iOS 5.0 and"
+            " later."
+        )
+    )
+
+
+    allow_video_conferencing = AMCNullBooleanField(
+        tag_text='allowVideoConferencing',
+        verbose_name=_('Allow Video Conferencing'),
+        null=True, blank=True,
+        help_text=_(
+            "allowVideoConferencing, Boolean: Optional. When false,"
+            " disables video conferencing. This key is deprecated on"
+            " unsupervised devices."
+        )
+    )
+
+
+    allow_voice_dialing = AMCNullBooleanField(
+        tag_text='allowVoiceDialing',
+        verbose_name=_('Allow Voice Dialing'),
+        null=True, blank=True,
+        help_text=_(
+            "allowVoiceDialing, Boolean: Optional. When false, disables"
+            " voice dialing if the device is locked with a"
+            " passcode. Default is true."
+        )
+    )
+
+    allow_you_tube = AMCNullBooleanField(
+        tag_text='allowYouTube',
+        verbose_name=_('Allow You Tube'),
+        null=True, blank=True,
+        help_text=_(
+            "allowYouTube, Boolean: Optional. When false, the YouTube"
+            " application is disabled and its icon is removed from the"
+            " Home screen. This key is ignored in iOS 6 and later"
+            " because the YouTube app is not provided."
+        )
+    )
+
+
+    allow_itunes = AMCNullBooleanField(
+        tag_text='allowiTunes',
+        verbose_name=_('Allow iTunes'),
+        null=True, blank=True,
+        help_text=_(
+            "allowiTunes, Boolean: Optional. When false, the iTunes"
+            " Music Store is disabled and its icon is removed from the"
+            " Home screen. Users cannot preview, purchase, or download"
+            " content. This key is deprecated on unsupervised devices."
+        )
+    )
+
+
+    allow_itunes_file_sharing = AMCNullBooleanField(
+        tag_text='allowiTunesFileSharing',
+        verbose_name=_('Allow iTunes File Sharing'),
+        null=True, blank=True,
+        help_text=_(
+            "allowiTunesFileSharing, Boolean: Optional. When false,"
+            " iTunes application file sharing services are"
+            " disabled. Availability: Available in macOS 10.13 and"
+            " later."
+        )
+    )
+
+
+    autonomous_single_app_mode_permitted_app_ids = AMCNullBooleanField(
+        tag_text='Autonomous Single App Mode Permitted App IDs',
+        verbose_name=_('Autonomous Single App Mode Permitted App IDs'),
+        null=True, blank=True,
+        help_text=_(
+            "autonomousSingleAppModePermittedAppIDs: Array of Strings:"
+            " Optional. Supervised only. If present, allows apps"
+            " identified by the bundle IDs listed in the array to"
+            " autonomously enter Single App Mode. Availability:"
+            " Available only in iOS 7.0 and later."
+        )
+    )
+
+
+    force_assistant_profanity_filter = AMCNullBooleanField(
+        tag_text='forceAssistantProfanityFilter',
+        verbose_name=_('Force Assistant Profanity Filter'),
+        null=True, blank=True,
+        help_text=_(
+            "forceAssistantProfanityFilter, Boolean: Optional."
+            " Supervised only. When true, forces the use of the"
+            " profanity filter assistant."
+        )
+    )
+
+
+    force_encrypted_backup = AMCNullBooleanField(
+        tag_text='forceEncryptedBackup',
+        verbose_name=_('Force Encrypted Backup'),
+        null=True, blank=True,
+        help_text=_(
+            "forceEncryptedBackup, Boolean: Optional. When true,"
+            " encrypts all backups."
+        )
+    )
+
+
+    force_itunes_store_password_entry = AMCNullBooleanField(
+        tag_text='forceITunesStorePasswordEntry',
+        verbose_name=_('Force iTunes Store Password Entry'),
+        null=True, blank=True,
+        help_text=_(
+            "forceITunesStorePasswordEntry, Boolean: Optional. When"
+            " true, forces user to enter their iTunes password for each"
+            " transaction. Availability: Available in iOS 5.0 and later."
+        )
+    )
+
+
+    force_limit_ad_tracking = AMCNullBooleanField(
+        tag_text='forceLimitAdTracking',
+        verbose_name=_('Force Limit Ad Tracking'),
+        null=True, blank=True,
+        help_text=_(
+            "forceLimitAdTracking, Boolean: Optional. If true, limits ad"
+            " tracking. Default is false. Availability: Available only"
+            " in iOS 7.0 and later."
+        )
+    )
+
+
+    force_air_play_outgoing_requests_pairing_password = AMCNullBooleanField(
+        tag_text='forceAirPlayOutgoingRequestsPairingPassword',
+        verbose_name=_('Force Air Play Outgoing Requests Pairing Password'),
+        null=True, blank=True,
+        help_text=_(
+            "forceAirPlayOutgoingRequestsPairingPassword, Boolean:"
+            " Optional. If set to true, forces all devices receiving"
+            " AirPlay requests from this device to use a pairing"
+            " password. Default is false. Availability: Available only"
+            " in iOS 7.1 and later."
+        )
+    )
+
+
+    force_air_play_incoming_requests_pairing_password = AMCNullBooleanField(
+        tag_text='forceAirPlayIncomingRequestsPairingPassword',
+        verbose_name=_('Force Air Play Incoming Requests Pairing Password'),
+        null=True, blank=True,
+        help_text=_(
+            "forceAirPlayIncomingRequestsPairingPassword, Boolean:"
+            " Optional. If set to true, forces all devices sending AirPlay"
+            " requests to this device to use a pairing password. Default"
+            " is false. Availability: Available only in Apple TV 6.1 to"
+            " tvOS 10.1. It is recommended to use the AirPlay Security"
+            " Payload."
+        )
+    )
+
+
+    allow_managed_apps_cloud_sync = AMCNullBooleanField(
+        tag_text='allowManagedAppsCloudSync',
+        verbose_name=_('Allow Managed Apps Cloud Sync'),
+        null=True, blank=True,
+        help_text=_(
+            "allowManagedAppsCloudSync, Boolean: Optional. If set to"
+            " false, prevents managed applications from using iCloud"
+            " sync."
+        )
+    )
+
+
+    allow_erase_content_and_settings = AMCNullBooleanField(
+        tag_text='allowEraseContentAndSettings',
+        verbose_name=_('Allow Erase Content And Settings'),
+        null=True, blank=True,
+        help_text=_(
+            "allowEraseContentAndSettings, Boolean: Supervised only. If"
+            " set to false, disables the “Erase All Content And"
+            " Settings” option in the Reset UI."
+        )
+    )
+
+
+    allow_spotlight_internet_results = AMCNullBooleanField(
+        tag_text='allowSpotlightInternetResults',
+        verbose_name=_('Allow Spotlight Internet Results'),
+        null=True, blank=True,
+        help_text=_(
+            "allowSpotlightInternetResults, Boolean: Supervised only. If"
+            " set to false, Spotlight will not return Internet search"
+            " results. Availability: Available in iOS and in macOS 10.11"
+            " and later."
+        )
+    )
+
+
+    allow_enabling_restrictions = AMCNullBooleanField(
+        tag_text='allowEnablingRestrictions',
+        verbose_name=_('Allow Enabling Restrictions'),
+        null=True, blank=True,
+        help_text=_(
+            "allowEnablingRestrictions, Boolean: Supervised only. If set"
+            " to false, disables the \"Enable Restrictions\" option in"
+            " the Restrictions UI in Settings."
+        )
+    )
+
+
+    allow_activity_continuation = AMCNullBooleanField(
+        tag_text='allowActivityContinuation',
+        verbose_name=_('Allow Activity Continuation'),
+        null=True, blank=True,
+        help_text=_(
+            "allowActivityContinuation, Boolean: If set to false,"
+            " Activity Continuation will be disabled. Defaults to true."
+        )
+    )
+
+
+    allow_enterprise_book_backup = AMCNullBooleanField(
+        tag_text='allowEnterpriseBookBackup',
+        verbose_name=_('Allow Enterprise Book Backup'),
+        null=True, blank=True,
+        help_text=_(
+            "allowEnterpriseBookBackup, Boolean: If set to false,"
+            " Enterprise books will not be backed up. Defaults to true."
+        )
+    )
+
+
+    allow_enterprise_book_metadata_sync = AMCNullBooleanField(
+        tag_text='allowEnterpriseBookMetadataSync',
+        verbose_name=_('Allow Enterprise Book Metadata Sync'),
+        null=True, blank=True,
+        help_text=_(
+            "allowEnterpriseBookMetadataSync, Boolean: If set to false,"
+            " Enterprise books notes and highlights will not be"
+            " synced. Defaults to true."
+        )
+    )
+
+
+    allow_podcasts = AMCNullBooleanField(
+        tag_text='allowPodcasts',
+        verbose_name=_('Allow Podcasts'),
+        null=True, blank=True,
+        help_text=_(
+            "allowPodcasts, Boolean: Supervised only. If set to false,"
+            " disables podcasts. Defaults to true. Availability:"
+            " Available in iOS 8.0 and later."
+        )
+    )
+
+
+    allow_definition_lookup = AMCNullBooleanField(
+        tag_text='allowDefinitionLookup',
+        verbose_name=_('Allow Definition Lookup'),
+        null=True, blank=True,
+        help_text=_(
+            "allowDefinitionLookup, Boolean: Supervised only. If set to"
+            " false, disables definition lookup. Defaults to true."
+            " Availability: Available in iOS 8.1.3 and later and in"
+            " macOS 10.11.2 and later."
+        )
+    )
+
+
+    allow_predictive_keyboard = AMCNullBooleanField(
+        tag_text='allowPredictiveKeyboard',
+        verbose_name=_('Allow Predictive Keyboard'),
+        null=True, blank=True,
+        help_text=_(
+           "allowPredictiveKeyboard, Boolean: Supervised only. If set"
+           " to false, disables predictive keyboards. Defaults to"
+           " true. Availability: Available in iOS 8.1.3 and later."
+        )
+    )
+
+
+    allow_auto_correction = AMCNullBooleanField(
+        tag_text='allowAutoCorrection',
+        verbose_name=_('Allow Auto Correction'),
+        null=True, blank=True,
+        help_text=_(
+            "allowAutoCorrection, Boolean: Supervised only. If set to"
+            " false, disables keyboard auto-correction. Defaults to"
+            " true. Availability: Available in iOS 8.1.3 and later."
+        )
+    )
+
+
+    allow_spell_check = AMCNullBooleanField(
+        tag_text='allowSpellCheck',
+        verbose_name=_('Allow Spell Check'),
+        null=True, blank=True,
+        help_text=_(
+            "allowSpellCheck, Boolean: Supervised only. If set to false,"
+            " disables keyboard spell-check. Defaults to true."
+            " Availability: Available in iOS 8.1.3 and later."
+        )
+    )
+
+
+    force_watch_wrist_detection = AMCNullBooleanField(
+        tag_text='forceWatchWristDetection',
+        verbose_name=_('Force Watch Wrist Detection'),
+        null=True, blank=True,
+        help_text=_(
+            "forceWatchWristDetection, Boolean: If set to true, a paired"
+            " Apple Watch will be forced to use Wrist Detection."
+            " Defaults to false. Availability: Available in iOS 8.2 and"
+            " later."
+        )
+    )
+
+
+    allow_music_service = AMCNullBooleanField(
+        tag_text='allowMusicService',
+        verbose_name=_('Allow Music Service'),
+        null=True, blank=True,
+        help_text=_(
+            "allowMusicService, Boolean: Supervised only. If set to"
+            " false, Music service is disabled and Music app reverts to"
+            " classic mode. Defaults to true. Availability: Available in"
+            " iOS 9.3 and later and macOS 10.12 and later."
+        )
+    )
+
+
+    allow_cloud_photo_library = AMCNullBooleanField(
+        tag_text='allowCloudPhotoLibrary',
+        verbose_name=_('Allow Cloud Photo Library'),
+        null=True, blank=True,
+        help_text=_(
+            "allowCloudPhotoLibrary, Boolean: If set to false, disables"
+            " iCloud Photo Library. Any photos not fully downloaded from"
+            " iCloud Photo Library to the device will be removed from"
+            " local storage. Availability: Available in iOS 9.0 and"
+            " later and in macOS 10.12 and later."
+        )
+    )
+
+
+    allow_news = AMCNullBooleanField(
+        tag_text='allowNews',
+        verbose_name=_('Allow News'),
+        null=True, blank=True,
+        help_text=_(
+            "allowNews, Boolean: Supervised only. If set to false,"
+            " disables News. Defaults to true. Availability: Available"
+            " in iOS 9.0 and later."
+        )
+    )
+
+
+    force_air_drop_unmanaged = AMCNullBooleanField(
+        tag_text='forceAirDropUnmanaged',
+        verbose_name=_('Force Air Drop Unmanaged'),
+        null=True, blank=True,
+        help_text=_(
+            "forceAirDropUnmanaged, Boolean: Optional. If set to true,"
+            " causes AirDrop to be considered an unmanaged drop"
+            " target. Defaults to false. Availability: Available in iOS"
+            " 9.0 and later."
+        )
+    )
+
+
+    allow_ui_app_installation = AMCNullBooleanField(
+        tag_text='allowUIAppInstallation',
+        verbose_name=_('Allow UI App Installation'),
+        null=True, blank=True,
+        help_text=_(
+            "allowUIAppInstallation, Boolean: Supervised only. When"
+            " false, the App Store is disabled and its icon is removed"
+            " from the Home screen. However, users may continue to use"
+            " Host apps (iTunes, Configurator) to install or update"
+            " their apps. Defaults to true. Availability: Available in"
+            " iOS 9.0 and later."
+        )
+    )
+
+
+    allow_screen_shot = AMCNullBooleanField(
+        tag_text='allowScreenShot',
+        verbose_name=_('Allow Screen Shot'),
+        null=True, blank=True,
+        help_text=_(
+            "allowScreenShot, Boolean: Optional. If set to false, users"
+            " can’t save a screenshot of the display and are prevented"
+            " from capturing a screen recording; it also prevents the"
+            " Classroom app from observing remote screens. Defaults to"
+            "true. Availability: Updated in iOS 9.0 to include screen"
+            " recordings."
+        )
+    )
+
+
+    allow_keyboard_shortcuts = AMCNullBooleanField(
+        tag_text='allowKeyboardShortcuts',
+        verbose_name=_('Allow Keyboard Shortcuts'),
+        null=True, blank=True,
+        help_text=_(
+            "allowKeyboardShortcuts, Boolean: Supervised only. If set to"
+            " false, keyboard shortcuts cannot be used. Defaults to"
+            " true. Availability: Available in iOS 9.0 and later."
+        )
+    )
+
+
+    allow_paired_watch = AMCNullBooleanField(
+        tag_text='allowPairedWatch',
+        verbose_name=_('Allow Paired Watch'),
+        null=True, blank=True,
+        help_text=_(
+            "allowPairedWatch, Boolean: Supervised only. If set to"
+            " false, disables pairing with an Apple Watch. Any currently"
+            " paired Apple Watch is unpaired and erased. Defaults to"
+            " true. Availability: Available in iOS 9.0 and later."
+        )
+    )
+
+
+    allow_passcode_modification = AMCNullBooleanField(
+        tag_text='allowPasscodeModification',
+        verbose_name=_('Allow Passcode Modification'),
+        null=True, blank=True,
+        help_text=_(
+            "allowPasscodeModification, Boolean: Supervised only. If set"
+            " to false, prevents the device passcode from being added,"
+            " changed, or removed. Defaults to true. This restriction is"
+            " ignored by shared iPads. Availability: Available in iOS"
+            " 9.0 and later."
+        )
+    )
+
+
+    allow_device_name_modification = AMCNullBooleanField(
+        tag_text='allowDeviceNameModification',
+        verbose_name=_('Allow Device Name Modification'),
+        null=True, blank=True,
+        help_text=_(
+            "allowDeviceNameModification, Boolean: Supervised only. If"
+            " set to false, prevents device name from being"
+            " changed. Defaults to true. Availability: Available in iOS"
+            " 9.0 and later."
+        )
+    )
+
+
+    allow_wallpaper_modification = AMCNullBooleanField(
+        tag_text='allowWallpaperModification',
+        verbose_name=_('Allow Wallpaper Modification'),
+        null=True, blank=True,
+        help_text=_(
+            "allowWallpaperModification, Boolean: Supervised only. If"
+            " set to false, prevents wallpaper from being"
+            " changed. Defaults to true. Availability: Available in iOS"
+            " 9.0 and later."
+        )
+    )
+
+
+    allow_automatic_app_downloads = AMCNullBooleanField(
+        tag_text='allowAutomaticAppDownloads',
+        verbose_name=_('Allow Automatic App Downloads'),
+        null=True, blank=True,
+        help_text=_(
+            "allowAutomaticAppDownloads, Boolean: Supervised only. If"
+            " set to false, prevents automatic downloading of apps"
+            " purchased on other devices. Does not affect updates to"
+            " existing apps. Defaults to true. Availability: Available"
+            " in iOS 9.0 and later."
+        )
+    )
+
+
+    allow_enterprise_app_trust = AMCNullBooleanField(
+        tag_text='allowEnterpriseAppTrust',
+        verbose_name=_('Allow Enterprise App Trust'),
+        null=True, blank=True,
+        help_text=_(
+            "allowEnterpriseAppTrust, Boolean: If set to false removes"
+            " the Trust Enterprise Developer button in"
+            " Settings->General->Profiles & Device Management,"
+            " preventing apps from being provisioned by universal"
+            " provisioning profiles. This restriction applies to free"
+            " developer accounts but it does not apply to enterprise app"
+            " developers who are trusted because their apps were pushed"
+            " via MDM, nor does it revoke previously granted"
+            " trust. Defaults to true. Availability: Available in iOS"
+            " 9.0 and later."
+        )
+    )
+
+
+    allow_radio_service = AMCNullBooleanField(
+        tag_text='allowRadioService',
+        verbose_name=_('Allow Radio Service'),
+        null=True, blank=True,
+        help_text=_(
+            "allowRadioService, Boolean: Supervised only. If set to"
+            " false, Apple Music Radio is disabled. Defaults to"
+            "true. Availability: Available in iOS 9.3 and later."
+        )
+    )
+
+
+    blacklisted_app_bundle_ids = AMCNullBooleanField(
+        tag_text='blacklistedAppBundleIDs',
+        verbose_name=_('Blacklisted App Bundle IDs'),
+        null=True, blank=True,
+        help_text=_(
+            "blacklistedAppBundleIDs, Array of Strings: Supervised"
+            " only. If present, prevents bundle IDs listed in the array"
+            " from being shown or launchable. Availability: Available in"
+            " iOS 9.3 and later."
+        )
+    )
+
+
+    whitelisted_app_bundle_ids = AMCNullBooleanField(
+        tag_text='whitelistedAppBundleIDs',
+        verbose_name=_('Whitelisted App Bundle IDs'),
+        null=True, blank=True,
+        help_text=_(
+            "whitelistedAppBundleIDs, Array of Strings: Supervised"
+            " only. If present, allows only bundle IDs listed in the"
+            " array from being shown or launchable. Availability:"
+            " Available in iOS 9.3 and later."
+        )
+    )
+
+
+    allow_notifications_modification = AMCNullBooleanField(
+        tag_text='allowNotificationsModification',
+        verbose_name=_('Allow Notifications Modification'),
+        null=True, blank=True,
+        help_text=_(
+            "allowNotificationsModification, Boolean: Supervised"
+            " only. If set to false, notification settings cannot be"
+            " modified. Defaults to true. Availability: Available in iOS"
+            "9.3 and later."
+        )
+    )
+
+
+    allow_remote_screen_observation = AMCNullBooleanField(
+        tag_text='allowRemoteScreenObservation',
+        verbose_name=_('Allow Remote Screen Observation'),
+        null=True, blank=True,
+        help_text=_(
+            "allowRemoteScreenObservation, Boolean: If set to false,"
+            " remote screen observation by the Classroom app is"
+            " disabled. Defaults to true. This key should be nested"
+            " beneath allowScreenShot as a sub-restriction. If"
+            " allowScreenShot is set to false, it also prevents the"
+            " Classroom app from observing remote screens. Availability:"
+            " Available in iOS 9.3 and later."
+        )
+    )
+
+
+    allow_diagnostic_submission_modification = AMCNullBooleanField(
+        tag_text='allowDiagnosticSubmissionModification',
+        verbose_name=_('Allow Diagnostic Submission Modification'),
+        null=True, blank=True,
+        help_text=_(
+            "allowDiagnosticSubmissionModification, Boolean: Supervised"
+            " only. If set to false, the diagnostic submission and app"
+            " analytics settings in the Diagnostics & Usage pane in"
+            " Settings cannot be modified. Defaults to true."
+            " Availability: Available in iOS 9.3.2 and later."
+        )
+    )
+
+
+    allow_bluetooth_modification = AMCNullBooleanField(
+        tag_text='allowBluetoothModification',
+        verbose_name=_('Allow Bluetooth Modification'),
+        null=True, blank=True,
+        help_text=_(
+            "allowBluetoothModification, Boolean: Supervised only. If"
+            "set to false, prevents modification of Bluetooth"
+            " settings. Defaults to true. Availability: Available in iOS"
+            " 10.0 and later."
+        )
+    )
+
+
+    allow_auto_unlock = AMCNullBooleanField(
+        tag_text='allowAutoUnlock',
+        verbose_name=_('Allow Auto Unlock'),
+        null=True, blank=True,
+        help_text=_(
+            "allowAutoUnlock, Boolean: If set to false, disallows macOS"
+            " auto unlock. Defaults to true. Availability: Available"
+            " only in macOS 10.12 and later."
+        )
+    )
+
+
+    allow_cloud_desktop_and_documents = AMCNullBooleanField(
+        tag_text='allowCloudDesktopAndDocuments',
+        verbose_name=_('Allow Cloud Desktop And Documents'),
+        null=True, blank=True,
+        help_text=_(
+            "allowCloudDesktopAndDocuments, Boolean: If set to false,"
+            " disallows macOS cloud desktop and document services."
+            " Defaults to true. Availability: Available only in macOS"
+            " 10.12.4 and later."
+        )
+    )
+
+
+    allow_dictation = AMCNullBooleanField(
+        tag_text='allowDictation',
+        verbose_name=_('Allow Dictation'),
+        null=True, blank=True,
+        help_text=_(
+            "allowDictation, Boolean: Supervised only. If set to false,"
+            " disallows dictation input. Defaults to true. Availability:"
+            " Available only in iOS 10.3 and later."
+        )
+    )
+
+
+    force_wifi_whitelisting = AMCNullBooleanField(
+        tag_text='forceWiFiWhitelisting',
+        verbose_name=_('Force WiFi Whitelisting'),
+        null=True, blank=True,
+        help_text=_(
+            "forceWiFiWhitelisting, Boolean: Optional. Supervised"
+            " only. If set to true, the device can join Wi-Fi networks"
+            " only if they were set up through a configuration profile."
+            " Defaults to false. Availability: Available only in iOS"
+            " 10.3 and later."
+        )
+    )
+
+
+    force_unprompted_managed_classroom_screen_observation = AMCNullBooleanField(
+        tag_text='forceUnpromptedManagedClassroomScreenObservation',
+        verbose_name=_('Force Unprompted Managed Classroom Screen Observation'),
+        null=True, blank=True,
+        help_text=_(
+            "forceUnpromptedManagedClassroomScreenObservation, Boolean:"
+            " Deprecated in iOS 11. Use"
+            " forceClassroomUnpromptedScreenObservation instead."
+        )
+    )
+
+
+    allow_air_print = AMCNullBooleanField(
+        tag_text='allowAirPrint',
+        verbose_name=_('Allow Air Print'),
+        null=True, blank=True,
+        help_text=_(
+            "allowAirPrint, Boolean: Supervised only. If set to false,"
+            " disallow AirPrint. Defaults to true. Availability:"
+            " Available in iOS 11.0 and later and macOS 10.13 and later."
+        )
+    )
+
+
+    allow_air_print_credentials_storage = AMCNullBooleanField(
+        tag_text='allowAirPrintCredentialsStorage',
+        verbose_name=_('Allow Air Print Credentials Storage'),
+        null=True, blank=True,
+        help_text=_(
+            "allowAirPrintCredentialsStorage, Boolean: Supervised"
+            " only. If set to false, disallows keychain storage of"
+            " username and password for Airprint. Defaults to true."
+            " Availability: Available only in iOS 11.0 and later."
+        )
+    )
+
+
+    force_air_print_trusted_tls_requirement = AMCNullBooleanField(
+        tag_text='forceAirPrintTrustedTLSRequirement',
+        verbose_name=_('Force Air Print Trusted TLS Requirement'),
+        null=True, blank=True,
+        help_text=_(
+            "forceAirPrintTrustedTLSRequirement, Boolean: Supervised"
+            " only. If set to true, requires trusted certificates for"
+            " TLS printing communication. Defaults to false."
+            " Availability: Available in iOS 11.0 and later and macOS"
+            " 10.13 and later."
+        )
+    )
+
+
+    allow_air_printi_beacon_discovery = AMCNullBooleanField(
+        tag_text='allowAirPrintiBeaconDiscovery',
+        verbose_name=_('Allow Air Printi Beacon Discovery'),
+        null=True, blank=True,
+        help_text=_(
+            "allowAirPrintiBeaconDiscovery, Boolean: Supervised only. If"
+            " set to false, disables iBeacon discovery of AirPrint"
+            " printers. This prevents spurious AirPrint Bluetooth"
+            " beacons from phishing for network traffic. Defaults to"
+            " true. Availability: Available in iOS 11.0 and later and"
+            " macOS 10.13 and later."
+        )
+    )
+
+
+    allow_proximity_setup_to_new_device = AMCNullBooleanField(
+        tag_text='allowProximitySetupToNewDevice',
+        verbose_name=_('Allow Proximity Setup To New Device'),
+        null=True, blank=True,
+        help_text=_(
+            "allowProximitySetupToNewDevice, Boolean: Supervised"
+            " only. If set to false, disables the prompt to setup new"
+            " devices that are nearby. Defaults to true. Availability:"
+            " Available only in iOS 11.0 and later."
+        )
+    )
+
+
+    allow_system_app_removal = AMCNullBooleanField(
+        tag_text='allowSystemAppRemoval',
+        verbose_name=_('Allow System App Removal'),
+        null=True, blank=True,
+        help_text=_(
+            "allowSystemAppRemoval, Boolean: Supervised only. If set to"
+            " false, disables the removal of system apps from the"
+            " device. Defaults to true. Availability: Available only in"
+            " iOS 11.0 and later."
+        )
+    )
+
+
+    allow_vpn_creation = AMCNullBooleanField(
+        tag_text='allowVPNCreation',
+        verbose_name=_('Allow VPN Creation'),
+        null=True, blank=True,
+        help_text=_(
+            "allowVPNCreation, Boolean: Supervised only. If set to"
+            " false, disallow the creation of VPN configurations."
+            " Defaults to true. Availability: Available only in iOS 11.0"
+            " and later."
+        )
+    )
+
+
+    force_delayed_software_updates = AMCNullBooleanField(
+        tag_text='forceDelayedSoftwareUpdates',
+        verbose_name=_('Force Delayed Software Updates'),
+        null=True, blank=True,
+        help_text=_(
+            "forceDelayedSoftwareUpdates, Boolean: Supervised only. If"
+            " set to true, delays user visibility of Software Updates."
+            " Defaults to false. Availability: Available in iOS 11.3 and"
+            " later and macOS 10.13 and later."
+        )
+    )
+
+
+    enforced_software_update_delay = AMCNullBooleanField(
+        tag_text='enforcedSoftwareUpdateDelay',
+        verbose_name=_('Enforced Software Update Delay'),
+        null=True, blank=True,
+        help_text=_(
+            "enforcedSoftwareUpdateDelay, Integer: Supervised only. This"
+            " restriction allows the admin to set how many days a"
+            " software update on the device will be delayed. With this"
+            " restriction in place, the user will not see a software"
+            " update until the specified number of days after the"
+            " software update release date. The max is 90 days and the"
+            " default value is 30. Availability: Available in iOS 11.3"
+            "and later and macOS 10.13.4 and later."
+        )
+    )
+
+
+    force_authentication_before_auto_fill = AMCNullBooleanField(
+        tag_text='forceAuthenticationBeforeAutoFill',
+        verbose_name=_('Force Authentication Before Auto Fill'),
+        null=True, blank=True,
+        help_text=_(
+            "forceAuthenticationBeforeAutoFill, Boolean:"
+            " Optional. Supervised only. If set to true, the uer will"
+            " have to authenticate before passwords or credit card"
+            " information can be autofilled in Safari and Apps. If this"
+            " restriction is not enforced, the user can toggle this"
+            " feature in settings. Only supported on devices with"
+            " FaceID. Defaults to true. Availability: Available only in"
+            " iOS 11.0 and later."
+        )
+    )
+
+
+    force_classroom_automatically_join_classes = AMCNullBooleanField(
+        tag_text='forceClassroomAutomaticallyJoinClasses',
+        verbose_name=_('Force Classroom Automatically Join Classes'),
+        null=True, blank=True,
+        help_text=_(
+            "forceClassroomAutomaticallyJoinClasses, Boolean:"
+            " Optional. Supervised only. If set to true, automatically"
+            " give permission to the teacher’s requests without"
+            " prompting the student. Defaults to false. Availability:"
+            " Available only in iOS 11.0 and later."
+        )
+    )
+
+
+    force_classroom_request_permission_to_leave_classes = AMCNullBooleanField(
+        tag_text='forceClassroomRequestPermissionToLeaveClasses',
+        verbose_name=_('Force Classroom Request Permission To Leave Classes'),
+        null=True, blank=True,
+        help_text=_(
+            "forceClassroomRequestPermissionToLeaveClasses, Boolean:"
+            " Optional. Supervised only. If set to true, a student"
+            " enrolled in an unmanaged course via Classroom will request"
+            " permission from the teacher when attempting to leave the"
+            " course. Defaults to false. Availability: Available only in"
+            " iOS 11.3 and later."
+        )
+    )
+
+
+    force_classroom_unprompted_app_and_device_lock = AMCNullBooleanField(
+        tag_text='forceClassroomUnpromptedAppAndDeviceLock',
+        verbose_name=_('Force Classroom Unprompted App And Device Lock'),
+        null=True, blank=True,
+        help_text=_(
+            "forceClassroomUnpromptedAppAndDeviceLock, Boolean:"
+            " Optional. Supervised only. If set to true, allow the"
+            " teacher to lock apps or the device without prompting the"
+            " student. Defaults to false. Availability: Available only"
+            " in iOS 11.0 and later."
+        )
+    )
+
+
+    force_classroom_unprompted_screen_observation = AMCNullBooleanField(
+        tag_text='forceClassroomUnpromptedScreenObservation',
+        verbose_name=_('Force Classroom Unprompted Screen Observation'),
+        null=True, blank=True,
+        help_text=_(
+            "forceClassroomUnpromptedScreenObservation, Boolean:"
+            " Optional. Supervised only. If set to true, and"
+            " ScreenObservationPermissionModificationAllowed is also"
+            " true in the Education payload, a student enrolled in a"
+            " managed course via the Classroom app will automatically"
+            " give permission to that course's teacher’s requests to"
+            " observe the student’s screen without prompting the"
+            " student. Defaults to false. Availability: Available only"
+            " in iOS 11.0 and later."
+        )
+    )
+
+
+    rating_region = AMCNullBooleanField(
+        tag_text='ratingRegion',
+        verbose_name=_('Rating Region'),
+        null=True, blank=True,
+        help_text=mark_safe(_(
+            "ratingRegion, String. This 2-letter key is used by profile"
+            " tools to display the proper ratings for given region."
+            " Possible values:<ul>"
+            " <li>au: Australia</li>"
+            " <li>ca: Canada</li>"
+            " <li>fr: France</li>"
+            " <li>de: Germany</li>"
+            " <li>ie: Ireland</li>"
+            " <li>jp: Japan</li>"
+            " <li>nz: New Zealand</li>"
+            " <li>gb: United Kingdom</li>"
+            " <li>us: United States</li>"
+            "</ul>"
+            "Availability: Available in iOS and tvOS 11.3 and later."
+        ))
+    )
+
+
+    rating_movies = AMCNullBooleanField(
+        tag_text='ratingMovies',
+        verbose_name=_('Rating Movies'),
+        null=True, blank=True,
+        help_text=mark_safe(_(
+            "ratingMovies, Integer. This value defines the maximum level"
+            " of movie content that is allowed on the device. Possible"
+            " values (with the US description of the rating level):<ul>"
+            "<li>1000: All</li>"
+            "<li>500: NC-17</li>"
+            "<li>400: R</li>"
+            "<li>300: PG-13</li>"
+            "<li>200: PG</li>"
+            "<li>100: G</li>"
+            "<li>0: None</li>"
+            "</ul>"
+            "Availability: Available only in iOS and tvOS 11.3 and later."
+        ))
+    )
+
+
+    rating_tv_shows = AMCNullBooleanField(
+        tag_text='ratingTVShows',
+        verbose_name=_('Rating TV Shows'),
+        null=True, blank=True,
+        help_text=mark_safe(_(
+            "ratingTVShows, Integer. This value defines the maximum"
+            " level of TV content that is allowed on the device."
+            " Possible values (with the US description of the rating"
+            " level):<ul>"
+            "<li>1000: All</li>"
+            "<li>600: TV-MA</li>"
+            "<li>500: TV-14</li>"
+            "<li>400: TV-PG</li>"
+            "<li>300: TV-G</li>"
+            "<li>200: TV-Y7</li>"
+            "<li>100: TV-Y</li>"
+            "<li>0: None</li>"
+            "</ul>"
+            "Availability: Available only in iOS and tvOS 11.3 and"
+            " later."
+        ))
+    )
+
+
+    rating_apps = AMCNullBooleanField(
+        tag_text='ratingApps',
+        verbose_name=_('Rating Apps'),
+        null=True, blank=True,
+        help_text=mark_safe(_(
+            "ratingApps, Integer. This value defines the maximum level"
+            " of app content that is allowed on the device. Possible"
+            " values (with the US description of the rating level):"
+            "<ul>"
+            "<li>1000: All</li>"
+            "<li>600: 17+</li>"
+            "<li>300: 12+</li>"
+            "<li>200: 9+</li>"
+            "<li>100: 4+</li>"
+            "<li>0: None</li>"
+            "</ul>"
+            "Availability: Available only in iOS 5 and tvOS 11.3 and"
+            " later."
+        ))
+    )
+
 PAYLOAD_TYPES = {
     'com.apple.mail.managed': EmailPayload,
+    'com.apple.applicationaccess': RestrictionsPayload
 }
